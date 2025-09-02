@@ -12,7 +12,22 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 22.x]  
+        node-version: [18.x, 22.x]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test -d test_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout repository
@@ -30,4 +45,7 @@ jobs:
         run: pnpm install
 
       - name: Run tests
+        env:
+          DATABASE_URL: postgres://test:test@localhost:5432/test_db
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: pnpm run test:ci
