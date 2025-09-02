@@ -1,51 +1,53 @@
-name: Run Tests
+name: Run tests
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  test:
+  run-ci:
+    name: Run tests
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 22.x]
 
     services:
       postgres:
         image: postgres:15
-        env:
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
-          POSTGRES_DB: test_db
         ports:
-          - 5432:5432
+          - 5433:5432
+        env:
+          POSTGRES_USER: docker
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DB: controll-habits-test
         options: >-
-          --health-cmd "pg_isready -U test -d test_db"
-          --health-interval 10s
+          --health-cmd pg_isready
+          --health-interval 5s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 10
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
         env:
-          DATABASE_URL: postgres://test:test@localhost:5432/test_db
+          NODE_ENV: test
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run: pnpm run test:ci
+          DATABASE_URL: postgresql://docker:docker@localhost:5433/controll-habits-test
+        run: pnpm test
