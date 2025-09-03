@@ -1,11 +1,13 @@
+import z from 'zod';
 import { UserNotFoundError } from '../errors/user-not-found';
 import { findUserByEmail } from './find-user-by-email';
 
-interface GetUserByEmailRequest {
-  email: string;
-}
+export const getUserByEmailSchema = z.object({
+  email: z.email(),
+});
 
-export async function getUserByEmail({ email }: GetUserByEmailRequest) {
+export type GetUserByEmailInput = z.infer<typeof getUserByEmailSchema>;
+export async function getUserByEmail({ email }: GetUserByEmailInput) {
   const { user } = await findUserByEmail({ email });
 
   if (!user) {

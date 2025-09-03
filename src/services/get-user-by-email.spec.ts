@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { UserNotFoundError } from '../errors/user-not-found';
-import { makeUser } from '../test/mocks/user';
+import { makeUser } from '../test/factories/user';
 import { getUserByEmail } from './get-user-by-email';
 
 describe('getUserByEmail service', () => {

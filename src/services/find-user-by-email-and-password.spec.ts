@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { makeUser } from '../test/mocks/user';
+import { makeUser } from '../test/factories/user';
 import { findUserByEmailAndPassword } from './find-user-by-email-and-password';
 
 describe('find user by email and password', () => {

@@ -1,19 +1,24 @@
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
+import { z } from 'zod';
 import { db } from '../db';
 import { users } from '../db/schema';
 import { InvalidCredentialsError } from '../errors/invalid-credentials';
 import { UserNotFoundError } from '../errors/user-not-found';
 
-interface FindUserByEmailAndPasswordRequest {
-  email: string;
-  password: string;
-}
+export const findUserByEmailAndPasswordSchema = z.object({
+  email: z.email(),
+  password: z.string(),
+});
+
+export type FindUserByEmailAndPasswordInput = z.infer<
+  typeof findUserByEmailAndPasswordSchema
+>;
 
 export async function findUserByEmailAndPassword({
   email,
   password,
-}: FindUserByEmailAndPasswordRequest) {
+}: FindUserByEmailAndPasswordInput) {
   const [user] = await db
     .select({
       id: users.id,
@@ -34,11 +39,9 @@ export async function findUserByEmailAndPassword({
     ? await bcrypt.compare(password, user.passwordHash)
     : false;
 
-  if (passwordMatches === false) {
+  if (!passwordMatches) {
     throw new InvalidCredentialsError();
   }
 
-  return {
-    user,
-  };
+  return { user };
 }

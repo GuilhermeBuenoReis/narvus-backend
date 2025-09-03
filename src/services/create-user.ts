@@ -1,22 +1,25 @@
 import bcrypt from 'bcrypt';
+import { z } from 'zod';
 import { db } from '../db';
 import { users } from '../db/schema';
 import { UserAlreadyExistError } from '../errors/user-already-exist';
 import { findUserByEmail } from './find-user-by-email';
 
-interface CreateUserRequest {
-  name: string;
-  email: string;
-  password: string;
-  avatarUrl?: string;
-}
+export const createUserInputSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(8),
+  avatarUrl: z.string().url().optional(),
+});
+
+export type CreateUserInput = z.infer<typeof createUserInputSchema>;
 
 export async function createUser({
   name,
   email,
   password,
   avatarUrl,
-}: CreateUserRequest) {
+}: CreateUserInput) {
   const { user: existingUser } = await findUserByEmail({ email });
 
   if (existingUser) {
@@ -25,7 +28,7 @@ export async function createUser({
 
   const passwordHash = await bcrypt.hash(password, 10);
 
-  const [response] = await db
+  const [user] = await db
     .insert(users)
     .values({
       name,
@@ -34,8 +37,6 @@ export async function createUser({
       avatarUrl,
     })
     .returning();
-
-  const user = response;
 
   return { user };
 }
