@@ -1,10 +1,14 @@
-name: Run tests
+name: CI de Testes e Build
 
-on: push
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   run-ci:
-    name: Run tests
+    name: Rodar Testes e Build
     runs-on: ubuntu-latest
 
     services:
@@ -23,21 +27,27 @@ jobs:
           --health-retries 10
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 1. Checkout do código
+        uses: actions/checkout@v4
 
-      - name: Install pnpm
+      - name: 2. Instalar pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      - name: Set up Node.js
+      - name: 3. Configurar ambiente Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install 
+      - name: 4. Instalar dependências
+        run: pnpm install
 
-      - name: Run tests
+      - name: 5. Rodar os testes
+        env:
+          DATABASE_URL: postgresql://docker:docker@localhost:5432/controll-habits-test
         run: pnpm test
+
+      - name: 6. Build do projeto
+        run: pnpm build
