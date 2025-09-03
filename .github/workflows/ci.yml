@@ -48,8 +48,4 @@ jobs:
         run: pnpm install
 
       - name: Run tests
-        env:
-          NODE_ENV: "test"
-          DATABASE_URL: "postgresql://docker:docker@localhost:5432/controll-habits-test"
-          JWT_SECRET: "super-secret-para-testes-na-ci"
         run: pnpm run test:ci
