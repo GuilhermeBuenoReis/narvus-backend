@@ -22,7 +22,7 @@ jobs:
         env:
           POSTGRES_USER: docker
           POSTGRES_PASSWORD: docker
-          POSTGRES_DB: controll-habits-test # Use o nome do DB de teste
+          POSTGRES_DB: controll-habits-test
         options: >-
           --health-cmd pg_isready
           --health-interval 5s
@@ -49,6 +49,7 @@ jobs:
 
       - name: Run tests
         env:
-          DATABASE_URL: postgresql://docker:docker@localhost:5432/controll-habits-test
-          JWT_SECRET: "super-secret-para-testes-na-ci" # Um valor qualquer para o teste
+          NODE_ENV: "test"
+          DATABASE_URL: "postgresql://docker:docker@localhost:5432/controll-habits-test"
+          JWT_SECRET: "super-secret-para-testes-na-ci"
         run: pnpm run test:ci

@@ -13,7 +13,7 @@
     "db:migrate:test": "dotenv -e .env.test -- drizzle-kit migrate",
     "test": "dotenv -e .env.test -- vitest run",
     "test:watch": "dotenv -e .env.test -- vitest",
-    "test:ci": "vitest run"
+    "test:ci": "dotenv -e .env.test -- vitest run"
   },
   "keywords": [],
   "author": "",
