@@ -1,12 +1,6 @@
 name: Run tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
   run-ci:
@@ -15,9 +9,9 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:13
         ports:
-          - 5433:5432
+          - 5432:5432
         env:
           POSTGRES_USER: docker
           POSTGRES_PASSWORD: docker
@@ -29,25 +23,21 @@ jobs:
           --health-retries 10
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      - uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install 
 
       - name: Run tests
-        env:
-          NODE_ENV: test
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          DATABASE_URL: postgresql://docker:docker@localhost:5433/controll-habits-test
         run: pnpm test
