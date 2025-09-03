@@ -2,35 +2,45 @@ name: Run Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
+    name: Run Tests and Build
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 22.x]  
+    services:
+      postgres:
+        image: bitnami/postgresql:latest
+        ports:
+          - 5433:5432
+        env:
+          POSTGRES_USER: docker
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DB: controll-habits-test
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+        uses: actions/checkout@v4
 
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run tests
-        run: pnpm run test:ci
+      - name: Run Migrations and Tests
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: postgresql://docker:docker@localhost:5433/controll-habits-test
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: pnpm test
+
+      - name: Build project
+        run: pnpm build
