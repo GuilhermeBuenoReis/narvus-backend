@@ -19,7 +19,9 @@ export const createhabitRoute: FastifyPluginAsyncZod = async app => {
           startsDate: z.coerce.date().optional(),
         }),
         reponse: {
-          201: z.null(),
+          201: z.object({
+            message: z.string(),
+          }),
         },
       },
     },
@@ -36,7 +38,7 @@ export const createhabitRoute: FastifyPluginAsyncZod = async app => {
           startsDate,
         });
 
-        reply.status(201).send();
+        reply.status(201).send({ message: 'Hábito criado com sucesso!' });
       } catch (error) {
         if (error instanceof InvalidUserIdError) {
           return reply.status(409).send({ message: error.message });

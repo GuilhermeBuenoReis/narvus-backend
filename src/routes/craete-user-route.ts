@@ -18,7 +18,9 @@ export const createUserRoute: FastifyPluginAsyncZod = async app => {
           avatarUrl: z.string().max(2048).optional(),
         }),
         reponse: {
-          201: z.null(),
+          201: z.object({
+            message: z.string(),
+          }),
         },
       },
     },
@@ -33,7 +35,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async app => {
           avatarUrl,
         });
 
-        reply.status(201).send();
+        reply.status(201).send({ message: 'Usuário criado com sucesso!' });
       } catch (error) {
         if (error instanceof UserAlreadyExistError) {
           return reply.status(409).send({ message: error.message });
