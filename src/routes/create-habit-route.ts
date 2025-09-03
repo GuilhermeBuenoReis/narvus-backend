@@ -1,5 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import z from 'zod';
+import { InvalidUserIdError } from '../errors/invalid-user-id';
 import { createHabit } from '../services/create-habit';
 
 export const createhabitRoute: FastifyPluginAsyncZod = async app => {
@@ -8,16 +9,14 @@ export const createhabitRoute: FastifyPluginAsyncZod = async app => {
     {
       schema: {
         operationId: 'createhabit',
-        tags: ['habit'],
+        tags: ['Habit'],
         description: 'Create a new habit',
-        params: z.object({
-          userId: z.uuid(),
-        }),
         body: z.object({
+          userId: z.uuid({ version: 'v4' }),
           title: z.string().min(3).max(256),
           description: z.string().max(2048).optional(),
           frequency: z.enum(['daily', 'weekly', 'monthly']).default('daily'),
-          startsDate: z.date().optional(),
+          startsDate: z.coerce.date().optional(),
         }),
         reponse: {
           201: z.null(),
@@ -26,8 +25,8 @@ export const createhabitRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
-        const { userId } = request.params;
-        const { title, description, frequency, startsDate } = request.body;
+        const { userId, title, description, frequency, startsDate } =
+          request.body;
 
         await createHabit({
           userId,
@@ -39,9 +38,10 @@ export const createhabitRoute: FastifyPluginAsyncZod = async app => {
 
         reply.status(201).send();
       } catch (error) {
-        if (error instanceof habitAlreadyExistError) {
+        if (error instanceof InvalidUserIdError) {
           return reply.status(409).send({ message: error.message });
         }
+
         request.log.error(error);
         return reply.status(500).send({ message: 'Internal server error' });
       }

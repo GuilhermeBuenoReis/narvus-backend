@@ -38,6 +38,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async app => {
         if (error instanceof UserAlreadyExistError) {
           return reply.status(409).send({ message: error.message });
         }
+
         request.log.error(error);
         return reply.status(500).send({ message: 'Internal server error' });
       }

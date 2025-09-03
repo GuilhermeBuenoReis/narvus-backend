@@ -12,6 +12,7 @@ import {
 } from 'fastify-type-provider-zod';
 import { authenticateUserRoute } from '../routes/authenticate-user-route';
 import { createUserRoute } from '../routes/craete-user-route';
+import { createhabitRoute } from '../routes/create-habit-route';
 import { getUserByEmailRoute } from '../routes/get-user-by-email-route';
 import { env } from './env';
 
@@ -48,6 +49,7 @@ app.register(import('@scalar/fastify-api-reference'), {
 });
 
 app.register(createUserRoute);
+app.register(createhabitRoute);
 app.register(getUserByEmailRoute);
 app.register(authenticateUserRoute);
 
