@@ -5,16 +5,15 @@
   "main": "index.js",
   "scripts": {
     "build": "tsup src",
-    "dev": "tsx watch --env-file=.env src/http/server.ts",
-    "start": "dotenv -e ./.env -- node dist/http/server.js",
-    "seed": "tsx --env-file=.env src/db/seed.ts",
+    "dev": "tsx watch --env-file=.env src/infrastructure/server.ts",
+    "start": "dotenv -e ./.env -- node dist/infrastructure/server.js",
+    "seed": "tsx --env-file=.env src/infrastructure/db/seed.ts",
     "pretest": "npm run db:migrate:test",
     "pretest:watch": "npm run db:migrate:test",
     "db:migrate:test": "dotenv -e .env.test -- drizzle-kit migrate",
     "test": "dotenv -e .env.test -- vitest run",
     "test:watch": "dotenv -e .env.test -- vitest",
-    "test:ci": "vitest run",
-    "test:ui": "vitest --ui"
+    "test:ci": "vitest run"
   },
   "keywords": [],
   "author": "",
