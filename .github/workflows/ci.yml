@@ -31,3 +31,6 @@ jobs:
 
       - name: Run tests
         run: pnpm run test:ci
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
