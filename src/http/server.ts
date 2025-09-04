@@ -13,6 +13,7 @@ import {
 import { authenticateUserRoute } from '../routes/authenticate-user-route';
 import { createUserRoute } from '../routes/craete-user-route';
 import { createhabitRoute } from '../routes/create-habit-route';
+import { getAllHabitsByUserRoute } from '../routes/get-all-habits-by-user-route';
 import { getUserByEmailRoute } from '../routes/get-user-by-email-route';
 import { env } from './env';
 
@@ -48,10 +49,11 @@ app.register(import('@scalar/fastify-api-reference'), {
   },
 });
 
+app.register(authenticateUserRoute);
 app.register(createUserRoute);
 app.register(createhabitRoute);
 app.register(getUserByEmailRoute);
-app.register(authenticateUserRoute);
+app.register(getAllHabitsByUserRoute);
 
 app
   .listen({
