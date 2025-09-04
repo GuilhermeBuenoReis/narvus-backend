@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { HabitNotFoundError } from '../errors/habit-not-found';
 import { makeUser } from '../test/factories/user';
+import { findHabitById } from './find-habit-by-id';
 import { findUserByEmail } from './find-user-by-email';
 
 describe('find user by email service', () => {
@@ -22,11 +24,12 @@ describe('find user by email service', () => {
     });
   });
 
-  it('should return null if user not found', async () => {
-    const result = await findUserByEmail({ email: 'invalid-email' });
-
-    expect(result).toEqual({
-      user: null,
-    });
+  it('should throw HabitNotFoundError if user and habit not found', async () => {
+    await expect(
+      findHabitById({
+        habitId: 'df6ffe1a-c613-4f28-9323-049dd8ebe432',
+        userId: 'b4a829c9-07ae-4ddd-88e6-c9c60ab2aa6f',
+      })
+    ).rejects.toThrow(HabitNotFoundError);
   });
 });

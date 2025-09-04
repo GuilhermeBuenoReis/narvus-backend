@@ -1,6 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import z from 'zod';
-import { HabitsNotFoundError } from '../errors/habits-not-found';
+import { HabitsNotFoundError } from '../errors/list-habits--by-user-not-found';
 import { getAllHabitsByUser } from '../services/get-all-habits-by-user';
 
 export const getAllHabitsByUserRoute: FastifyPluginAsyncZod = async app => {
@@ -12,14 +12,14 @@ export const getAllHabitsByUserRoute: FastifyPluginAsyncZod = async app => {
         tags: ['Habit'],
         description: 'Get all habits for a given user',
         params: z.object({
-          userId: z.string().uuid(),
+          userId: z.uuid({ version: 'v4' }),
         }),
         response: {
           200: z.object({
             habits: z.array(
               z.object({
-                id: z.string().uuid(),
-                userId: z.string().uuid(),
+                id: z.uuid({ version: 'v4' }),
+                userId: z.uuid({ version: 'v4' }),
                 title: z.string(),
                 description: z.string().nullable(),
                 frequency: z.enum(['daily', 'weekly', 'monthly']),

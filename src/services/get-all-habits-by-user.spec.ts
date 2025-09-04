@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { HabitsNotFoundError } from '../errors/habits-not-found';
+import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found';
 import { getAllHabitsByUser } from '../services/get-all-habits-by-user';
 import { makeHabit } from '../test/factories/habit';
 
@@ -24,11 +24,11 @@ describe('get all habits by user service', () => {
     });
   });
 
-  it('should throw HabitsNotFoundError if user has no habits', async () => {
+  it('should throw ListHabitsByUserNotFoundError if user has no habits', async () => {
     const fakeUserId = 'f3e6e7fc-98d6-4e9b-9a84-67b0d5a0c8c3';
 
     await expect(
       getAllHabitsByUser({ userId: fakeUserId })
-    ).rejects.toBeInstanceOf(HabitsNotFoundError);
+    ).rejects.toBeInstanceOf(ListHabitsByUserNotFoundError);
   });
 });

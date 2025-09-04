@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { env } from '../http/env';
+import { env } from '../middleware/env';
 import { findUserByEmailAndPassword } from './find-user-by-email-and-password';
 
 interface AuthenticateUserRequest {

@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import z from 'zod';
 import { db } from '../db';
 import { habits } from '../db/schema';
-import { HabitsNotFoundError } from '../errors/habits-not-found';
+import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found';
 
 const getAllHabitsByUserSchema = z.object({
   userId: z.uuid({ version: 'v4' }),
@@ -16,7 +16,7 @@ export async function getAllHabitsByUser({ userId }: GetAllHabitsByUserInput) {
     .from(habits)
     .where(eq(habits.userId, userId));
 
-  if (result.length === 0) throw new HabitsNotFoundError(userId);
+  if (result.length === 0) throw new ListHabitsByUserNotFoundError(userId);
 
   return {
     habits: result,

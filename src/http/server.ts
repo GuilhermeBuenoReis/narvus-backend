@@ -10,12 +10,13 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+import { env } from '../middleware/env';
 import { authenticateUserRoute } from '../routes/authenticate-user-route';
 import { createUserRoute } from '../routes/craete-user-route';
 import { createhabitRoute } from '../routes/create-habit-route';
 import { getAllHabitsByUserRoute } from '../routes/get-all-habits-by-user-route';
+import { getHabitByIdRoute } from '../routes/get-habit-by-id';
 import { getUserByEmailRoute } from '../routes/get-user-by-email-route';
-import { env } from './env';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -54,6 +55,7 @@ app.register(createUserRoute);
 app.register(createhabitRoute);
 app.register(getUserByEmailRoute);
 app.register(getAllHabitsByUserRoute);
+app.register(getHabitByIdRoute);
 
 app
   .listen({

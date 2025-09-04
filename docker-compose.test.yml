@@ -1,10 +1,8 @@
-name: controll-habits-test
-
 services:
-  pg: 
+  controll-habits-test:
     image: bitnami/postgresql:latest
     ports:
-      - '5433:5432'  
+      - '5433:5432'
     environment:
       - POSTGRES_USER=docker
       - POSTGRES_PASSWORD=docker
