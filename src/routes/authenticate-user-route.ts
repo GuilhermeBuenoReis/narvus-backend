@@ -1,12 +1,14 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { UnauthorizedError } from '../errors/unauthorized-error';
+import { authenticateUserMiddleware } from '../middleware/authenticate-user-middleware';
 import { authenticateUser } from '../services/authenticate-user';
 
 export const authenticateUserRoute: FastifyPluginAsyncZod = async app => {
   app.post(
-    '/login',
+    '/user/authenticate',
     {
+      onRequest: [authenticateUserMiddleware],
       schema: {
         operationId: 'authenticateUser',
         tags: ['Authentication', 'User'],

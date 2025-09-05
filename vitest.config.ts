@@ -4,6 +4,6 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    ui: !process.env.CI,
+    // ui: !process.env.CI,
   },
 });

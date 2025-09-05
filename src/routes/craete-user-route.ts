@@ -5,7 +5,7 @@ import { createUser } from '../services/create-user';
 
 export const createUserRoute: FastifyPluginAsyncZod = async app => {
   app.post(
-    '/create-user',
+    '/user/create-user',
     {
       schema: {
         operationId: 'createUser',

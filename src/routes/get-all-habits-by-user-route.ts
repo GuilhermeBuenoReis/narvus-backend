@@ -1,19 +1,18 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import z from 'zod';
-import { HabitsNotFoundError } from '../errors/list-habits--by-user-not-found';
+import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found';
+import { authenticateUserMiddleware } from '../middleware/authenticate-user-middleware';
 import { getAllHabitsByUser } from '../services/get-all-habits-by-user';
 
 export const getAllHabitsByUserRoute: FastifyPluginAsyncZod = async app => {
   app.get(
-    '/users/:userId/habits',
+    '/user/habits/get-all',
     {
+      onRequest: [authenticateUserMiddleware],
       schema: {
         operationId: 'getAllHabitsByUser',
         tags: ['Habit'],
         description: 'Get all habits for a given user',
-        params: z.object({
-          userId: z.uuid({ version: 'v4' }),
-        }),
         response: {
           200: z.object({
             habits: z.array(
@@ -38,13 +37,13 @@ export const getAllHabitsByUserRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
-        const { userId } = request.params;
+        const userId = request.user.id;
 
         const result = await getAllHabitsByUser({ userId });
 
         return reply.status(200).send(result);
       } catch (error) {
-        if (error instanceof HabitsNotFoundError) {
+        if (error instanceof ListHabitsByUserNotFoundError) {
           return reply.status(404).send({ message: error.message });
         }
 

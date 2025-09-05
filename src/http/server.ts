@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import fastifyCookie from '@fastify/cookie';
+import fastifyJwt from '@fastify/jwt';
 import fastifySwagger from '@fastify/swagger';
 import { createId } from '@paralleldrive/cuid2';
 import fastify from 'fastify';
@@ -10,13 +11,14 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
-import { env } from '../middleware/env';
 import { authenticateUserRoute } from '../routes/authenticate-user-route';
 import { createUserRoute } from '../routes/craete-user-route';
-import { createhabitRoute } from '../routes/create-habit-route';
+import { createHabitRoute } from '../routes/create-habit-route';
 import { getAllHabitsByUserRoute } from '../routes/get-all-habits-by-user-route';
 import { getHabitByIdRoute } from '../routes/get-habit-by-id';
 import { getUserByEmailRoute } from '../routes/get-user-by-email-route';
+import { updateHabitRoute } from '../routes/update-habit';
+import { env } from './env';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -39,6 +41,14 @@ app.register(fastifyCookie, {
   parseOptions: {},
 });
 
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+  cookie: {
+    cookieName: 'narvus_token',
+    signed: false,
+  },
+});
+
 app.register(import('@scalar/fastify-api-reference'), {
   routePrefix: '/docs',
   configuration: {
@@ -52,10 +62,11 @@ app.register(import('@scalar/fastify-api-reference'), {
 
 app.register(authenticateUserRoute);
 app.register(createUserRoute);
-app.register(createhabitRoute);
+app.register(createHabitRoute);
 app.register(getUserByEmailRoute);
 app.register(getAllHabitsByUserRoute);
 app.register(getHabitByIdRoute);
+app.register(updateHabitRoute);
 
 app
   .listen({

@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import { defineConfig } from 'drizzle-kit';
-import { env } from './src/middleware/env';
+import { env } from './src/http/env';
 
 export default defineConfig({
   out: './.migrations',

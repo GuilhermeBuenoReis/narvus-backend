@@ -9,7 +9,7 @@ export const createHabitInputSchema = z.object({
   title: z.string().min(3),
   description: z.string().optional(),
   frequency: z.enum(['daily', 'weekly', 'monthly']).default('daily'),
-  startsDate: z.date().optional(),
+  startsDate: z.coerce.date().optional(),
 });
 
 export type CreateHabitInput = z.infer<typeof createHabitInputSchema>;
@@ -27,7 +27,9 @@ export async function createHabit({
     throw new InvalidUserIdError(userId);
   }
 
-  const dateToInsert = (startsDate ?? new Date()).toISOString().slice(0, 10);
+  const dateToInsert = startsDate
+    ? startsDate.toISOString().slice(0, 10)
+    : undefined;
 
   const [habit] = await db
     .insert(habits)

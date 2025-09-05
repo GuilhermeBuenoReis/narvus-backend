@@ -1,19 +1,20 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import z from 'zod';
+import { z } from 'zod';
 import { HabitNotFoundError } from '../errors/habit-not-found';
+import { authenticateUserMiddleware } from '../middleware/authenticate-user-middleware';
 import { findHabitById } from '../services/find-habit-by-id';
 
 export const getHabitByIdRoute: FastifyPluginAsyncZod = async app => {
   app.post(
-    '/users/:userId/habits/:habitId',
+    '/habits/:id',
     {
+      onRequest: [authenticateUserMiddleware],
       schema: {
         operationId: 'getHabitById',
         tags: ['Habit'],
         description: 'get habit by id',
         params: z.object({
-          habitId: z.uuid({ version: 'v4' }),
-          userId: z.uuid({ version: 'v4' }),
+          id: z.uuid({ version: 'v4' }),
         }),
         reponse: z.object({
           id: z.uuid({ version: 'v4' }),
@@ -27,9 +28,10 @@ export const getHabitByIdRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
-        const { habitId, userId } = request.params;
+        const { id } = request.params;
+        const userId = request.user.id;
 
-        const habit = await findHabitById({ habitId, userId });
+        const habit = await findHabitById({ habitId: id, userId });
 
         return reply.status(200).send(habit);
       } catch (error) {

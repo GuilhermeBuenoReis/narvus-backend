@@ -5,7 +5,7 @@ import { getUserByEmail } from '../services/get-user-by-email';
 
 export const getUserByEmailRoute: FastifyPluginAsyncZod = async app => {
   app.post(
-    '/get-user',
+    '/user/get-user',
     {
       schema: {
         operationId: 'getUser',
