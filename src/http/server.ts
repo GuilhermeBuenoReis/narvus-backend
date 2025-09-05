@@ -11,9 +11,13 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+
 import { authenticateUserRoute } from '../routes/authenticate-user-route';
+
 import { createUserRoute } from '../routes/craete-user-route';
+import { createHabitEntrieRoute } from '../routes/create-habit-entrie-route';
 import { createHabitRoute } from '../routes/create-habit-route';
+import { deleteHabitRoute } from '../routes/delete-habit-route';
 import { getAllHabitsByUserRoute } from '../routes/get-all-habits-by-user-route';
 import { getHabitByIdRoute } from '../routes/get-habit-by-id';
 import { getUserByEmailRoute } from '../routes/get-user-by-email-route';
@@ -61,12 +65,18 @@ app.register(import('@scalar/fastify-api-reference'), {
 });
 
 app.register(authenticateUserRoute);
+
 app.register(createUserRoute);
 app.register(createHabitRoute);
+app.register(createHabitEntrieRoute);
+
 app.register(getUserByEmailRoute);
 app.register(getAllHabitsByUserRoute);
 app.register(getHabitByIdRoute);
+
 app.register(updateHabitRoute);
+
+app.register(deleteHabitRoute);
 
 app
   .listen({

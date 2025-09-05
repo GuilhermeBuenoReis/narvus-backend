@@ -9,7 +9,7 @@ export const createUserInputSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(8),
-  avatarUrl: z.string().url().optional(),
+  avatarUrl: z.url().optional(),
 });
 
 export type CreateUserInput = z.infer<typeof createUserInputSchema>;
