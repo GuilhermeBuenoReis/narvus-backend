@@ -1,21 +1,31 @@
 import { faker } from '@faker-js/faker';
-import type { InferSelectModel } from 'drizzle-orm';
+import type { InferInsertModel } from 'drizzle-orm';
 import { db } from '../../db';
-import { habitEntries, type habits } from '../../db/schema';
+import { habitEntries } from '../../db/schema';
 import { makeHabit } from './habit';
 import { makeUser } from './user';
 
 export async function makeHabitEntrie(
-  override: Partial<InferSelectModel<typeof habits>> = {}
+  override: Partial<InferInsertModel<typeof habitEntries>> = {}
 ) {
-  const userId = override.userId ?? (await makeUser()).id;
-  const habitId = override.id ?? (await makeHabit()).id;
+  let userId = override.userId;
+  let habitId = override.habitId;
+
+  if (!userId) {
+    const user = await makeUser();
+    userId = user.id;
+  }
+
+  if (!habitId) {
+    const habit = await makeHabit({ userId });
+    habitId = habit.id;
+  }
 
   const [row] = await db
     .insert(habitEntries)
     .values({
-      userId: userId,
-      habitId: habitId,
+      userId,
+      habitId,
       entryDate: faker.date.past({ years: 1 }).toISOString().slice(0, 10),
       completed: faker.datatype.boolean(),
       ...override,
