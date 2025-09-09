@@ -19,9 +19,10 @@ import { createHabitEntrieRoute } from '../routes/create-habit-entrie-route';
 import { createHabitRoute } from '../routes/create-habit-route';
 import { deleteHabitRoute } from '../routes/delete-habit-route';
 import { getAllHabitsByUserRoute } from '../routes/get-all-habits-by-user-route';
-import { getHabitByIdRoute } from '../routes/get-habit-by-id';
+import { getHabitEntriesRoute } from '../routes/get-entries-by-habit-id-route';
+import { getHabitByIdRoute } from '../routes/get-habit-by-id-route';
 import { getUserByEmailRoute } from '../routes/get-user-by-email-route';
-import { updateHabitRoute } from '../routes/update-habit';
+import { updateHabitRoute } from '../routes/update-habit-route';
 import { env } from './env';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -70,9 +71,10 @@ app.register(createUserRoute);
 app.register(createHabitRoute);
 app.register(createHabitEntrieRoute);
 
-app.register(getUserByEmailRoute);
-app.register(getAllHabitsByUserRoute);
 app.register(getHabitByIdRoute);
+app.register(getUserByEmailRoute);
+app.register(getHabitEntriesRoute);
+app.register(getAllHabitsByUserRoute);
 
 app.register(updateHabitRoute);
 
