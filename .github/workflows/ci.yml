@@ -40,4 +40,5 @@ jobs:
         env:
           DATABASE_URL: postgresql://docker:docker@localhost:5433/controll-habits-test
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
         run: pnpm test
