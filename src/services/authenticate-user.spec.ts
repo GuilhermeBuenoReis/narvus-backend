@@ -9,7 +9,8 @@ describe('authenticate user', () => {
     const result = await authenticateUser({ email, password });
 
     expect(result).toEqual({
-      token: expect.any(String),
+      accessToken: expect.any(String),
+      refreshToken: expect.any(String),
     });
   });
 });

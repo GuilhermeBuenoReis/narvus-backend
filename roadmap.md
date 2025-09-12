@@ -35,8 +35,8 @@
 ## 1) Core - Auth, Users, Health, Config
 
 - [x] `services/authenticate-user.ts` — autentica por email/senha + retorna JWT
-- [ ] `services/refresh-token.ts` — renovar token / refresh
-- [ ] `services/invalidate-token.ts` — logout / blacklist token
+- [x] `services/refresh-token.ts` — renovar token / refresh
+- [x] `services/invalidate-token.ts` — logout / blacklist token
 - [x] `services/create-user.ts` — criar usuário (signup)
 - [x] `services/find-user-by-id.ts`
 - [x] `services/find-user-by-email.ts`

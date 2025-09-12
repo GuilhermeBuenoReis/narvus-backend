@@ -8,6 +8,127 @@
     "schemas": {}
   },
   "paths": {
+    "/user/logout": {
+      "post": {
+        "operationId": "logoutUser",
+        "tags": [
+          "Authentication",
+          "User"
+        ],
+        "description": "Logs out the user and revokes the refresh token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refreshToken": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "refreshToken"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/refresh": {
+      "post": {
+        "operationId": "refreshToken",
+        "tags": [
+          "Authentication",
+          "User"
+        ],
+        "description": "Renews accessToken using valid refreshToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refreshToken": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "refreshToken"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "accessToken",
+                    "refreshToken"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/authenticate": {
       "post": {
         "operationId": "authenticateUser",
@@ -15,7 +136,7 @@
           "Authentication",
           "User"
         ],
-        "description": "Realiza o login do usuário e retorna o token JWT com validade de 60 dias",
+        "description": "Realiza login e retorna accessToken (15m) + refreshToken (7d)",
         "requestBody": {
           "content": {
             "application/json": {
@@ -49,12 +170,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "token": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
                       "type": "string"
                     }
                   },
                   "required": [
-                    "token"
+                    "accessToken",
+                    "refreshToken"
                   ],
                   "additionalProperties": false
                 }

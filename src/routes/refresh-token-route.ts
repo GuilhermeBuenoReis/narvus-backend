@@ -1,20 +1,18 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { UnauthorizedError } from '../errors/unauthorized-error';
-import { authenticateUser } from '../services/authenticate-user';
+import { refreshToken } from '../services/refresh-token';
 
-export const authenticateUserRoute: FastifyPluginAsyncZod = async app => {
+export const refreshTokenRoute: FastifyPluginAsyncZod = async app => {
   app.post(
-    '/user/authenticate',
+    '/user/refresh',
     {
       schema: {
-        operationId: 'authenticateUser',
+        operationId: 'refreshToken',
         tags: ['Authentication', 'User'],
-        description:
-          'Realiza login e retorna accessToken (15m) + refreshToken (7d)',
+        description: 'Renews accessToken using valid refreshToken',
         body: z.object({
-          email: z.string().email(),
-          password: z.string().min(6),
+          refreshToken: z.string(),
         }),
         response: {
           200: z.object({
@@ -27,8 +25,9 @@ export const authenticateUserRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
-        const { email, password } = request.body;
-        const result = await authenticateUser({ email, password });
+        const { refreshToken: rToken } = request.body;
+
+        const result = await refreshToken({ refreshToken: rToken });
 
         reply
           .setCookie('narvus_token', result.accessToken, {

@@ -22,6 +22,8 @@ import { getAllHabitsByUserRoute } from '../routes/get-all-habits-by-user-route'
 import { getHabitEntriesRoute } from '../routes/get-entries-by-habit-id-route';
 import { getHabitByIdRoute } from '../routes/get-habit-by-id-route';
 import { getUserByEmailRoute } from '../routes/get-user-by-email-route';
+import { logoutRoute } from '../routes/logout';
+import { refreshTokenRoute } from '../routes/refresh-token-route';
 import { updateHabitRoute } from '../routes/update-habit-route';
 import { env } from './env';
 
@@ -65,6 +67,8 @@ app.register(import('@scalar/fastify-api-reference'), {
   },
 });
 
+app.register(logoutRoute);
+app.register(refreshTokenRoute);
 app.register(authenticateUserRoute);
 
 app.register(createUserRoute);

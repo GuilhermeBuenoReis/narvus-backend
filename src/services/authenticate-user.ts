@@ -25,7 +25,7 @@ export async function authenticateUser({
     throw new UnauthorizedError('Credenciais inválidas.');
   }
 
-  const token = jwt.sign(
+  const accessToken = jwt.sign(
     {
       id: user.id,
       name: user.name,
@@ -34,11 +34,17 @@ export async function authenticateUser({
     env.JWT_SECRET,
     {
       subject: user.id,
-      expiresIn: '7d',
+      expiresIn: '15m',
     }
   );
 
+  const refreshToken = jwt.sign({}, env.JWT_REFRESH_SECRET, {
+    subject: user.id,
+    expiresIn: '7d',
+  });
+
   return {
-    token,
+    accessToken,
+    refreshToken,
   };
 }
