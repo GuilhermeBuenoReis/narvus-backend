@@ -1,11 +1,11 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import z from 'zod';
-import { UserNotFoundError } from '../errors/user-not-found';
+import { z } from 'zod/v4';
+import { UserNotFoundError } from '../errors/user-not-found-error';
 import { getUserByEmail } from '../services/get-user-by-email';
 
 export const getUserByEmailRoute: FastifyPluginAsyncZod = async app => {
   app.post(
-    '/user/get-user',
+    '/user/me',
     {
       schema: {
         operationId: 'getUser',

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
-import { HabitNotFoundError } from '../errors/habit-not-found';
-import { UserNotFoundError } from '../errors/user-not-found';
+import { HabitNotFoundError } from '../errors/habit-not-found-error';
+import { UserNotFoundError } from '../errors/user-not-found-error';
 import { makeHabit } from '../test/factories/habit';
 import { makeUser } from '../test/factories/user';
 import { createHabitEntrie } from './create-habit-entrie';

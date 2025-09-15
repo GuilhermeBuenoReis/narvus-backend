@@ -41,14 +41,13 @@
 - [x] `services/find-user-by-id.ts`
 - [x] `services/find-user-by-email.ts`
 - [x] `services/find-user-by-email-and-password.ts` — valida senha
-- [ ] `services/update-user.ts`
+- [x] `services/update-user.ts`
 - [ ] `services/delete-user.ts`
-- [ ] `services/list-users.ts` — admin listing
-- [ ] `routes/auth/register.route.ts` — endpoint register
+- [x] `routes/auth/register.route.ts` — endpoint register
 - [x] `routes/auth/login.route.ts` — login
-- [ ] `routes/auth/logout.route.ts`
-- [ ] `routes/auth/refresh-token.route.ts`
-- [ ] `routes/users.update.route.ts` — PUT /users/:id
+- [x] `routes/auth/logout.route.ts`
+- [x] `routes/auth/refresh-token.route.ts`
+- [x] `routes/users.update.route.ts` — PUT /users/:id
 - [x] `routes/users.get.route.ts` — GET /users/:id
 - [ ] `routes/users.delete.route.ts`
 - [ ] `utils/password.hash.ts` — hashing (bcrypt/argon2)

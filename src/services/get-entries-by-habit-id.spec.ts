@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { HabitNotFoundError } from '../errors/habit-not-found';
+import { HabitNotFoundError } from '../errors/habit-not-found-error';
 import { getEntreisByHabitId } from '../services/get-entries-by-habit-id';
 import { makeHabit } from '../test/factories/habit';
 import { makeHabitEntrie } from '../test/factories/habit-entrie';

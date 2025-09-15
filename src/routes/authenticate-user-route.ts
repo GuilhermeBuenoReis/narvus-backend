@@ -1,5 +1,5 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { UnauthorizedError } from '../errors/unauthorized-error';
 import { authenticateUser } from '../services/authenticate-user';
 

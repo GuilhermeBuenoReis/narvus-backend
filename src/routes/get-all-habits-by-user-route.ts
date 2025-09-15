@@ -1,6 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import z from 'zod';
-import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found';
+import z from 'zod/v4';
+import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found-error';
 import { authenticateUserMiddleware } from '../middleware/authenticate-user-middleware';
 import { getAllHabitsByUser } from '../services/get-all-habits-by-user';
 

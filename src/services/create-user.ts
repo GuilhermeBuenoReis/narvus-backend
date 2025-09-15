@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import { db } from '../db';
 import { users } from '../db/schema';
-import { UserAlreadyExistError } from '../errors/user-already-exist';
+import { UserAlreadyExistError } from '../errors/user-already-exist-error';
 import { findUserByEmail } from './find-user-by-email';
 
 export const createUserInputSchema = z.object({

@@ -1,20 +1,20 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod/v4';
-import { HabitNotFoundError } from '../errors/habit-not-found-error';
+import { UserNotFoundError } from '../errors/user-not-found-error';
 import { authenticateUserMiddleware } from '../middleware/authenticate-user-middleware';
-import { deleteHabit } from '../services/delete-habit';
+import { deleteUser } from '../services/delete-user';
 
-export const deleteHabitRoute: FastifyPluginAsyncZod = async app => {
+export const deleteUserRoute: FastifyPluginAsyncZod = async app => {
   app.delete(
-    '/habits/:habitId',
+    '/user/me/:userId',
     {
       onRequest: [authenticateUserMiddleware],
       schema: {
-        operationId: 'deleteHabit',
-        tags: ['Habit'],
-        description: 'delete habit',
+        operationId: 'deleteUser',
+        tags: ['User'],
+        description: 'delete User',
         params: z.object({
-          habitId: z.uuid({ version: 'v4' }),
+          userId: z.uuid({ version: 'v4' }),
         }),
         response: {
           200: z.object({
@@ -27,14 +27,14 @@ export const deleteHabitRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
-        const { habitId } = request.params;
+        const { userId } = request.params;
 
-        await deleteHabit({ habitId });
+        await deleteUser({ userId });
 
         return reply.status(200).send({ sucess: true });
       } catch (error) {
         request.log.error(error);
-        if (error instanceof HabitNotFoundError) {
+        if (error instanceof UserNotFoundError) {
           return reply.status(404).send({ message: error.message });
         }
 

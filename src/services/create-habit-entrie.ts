@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import { z } from 'zod';
 import { db } from '../db';
 import { habitEntries } from '../db/schema';
-import { HabitNotFoundError } from '../errors/habit-not-found';
-import { UserNotFoundError } from '../errors/user-not-found';
+import { HabitNotFoundError } from '../errors/habit-not-found-error';
+import { UserNotFoundError } from '../errors/user-not-found-error';
 import { findHabitById } from './find-habit-by-id';
 import { findUserById } from './find-user-by-id';
 

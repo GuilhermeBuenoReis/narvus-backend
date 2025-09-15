@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import z from 'zod';
 import { db } from '../db';
 import { habits } from '../db/schema';
-import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found';
+import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found-error';
 
 const getAllHabitsByUserSchema = z.object({
   userId: z.uuid({ version: 'v4' }),

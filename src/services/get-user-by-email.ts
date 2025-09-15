@@ -1,5 +1,5 @@
 import z from 'zod';
-import { UserNotFoundError } from '../errors/user-not-found';
+import { UserNotFoundError } from '../errors/user-not-found-error';
 import { findUserByEmail } from './find-user-by-email';
 
 export const getUserByEmailSchema = z.object({

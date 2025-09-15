@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker';
-import { describe, expect, it } from 'vitest';
-import { HabitNotFoundError } from '../errors/habit-not-found';
-import { UserNotFoundError } from '../errors/user-not-found';
+import { describe, expect, it, vi } from 'vitest';
+import * as dbModule from '../db';
+import { HabitNotFoundError } from '../errors/habit-not-found-error';
+import { UpdateFailedError } from '../errors/update-failed-error';
+import { UserNotFoundError } from '../errors/user-not-found-error';
+import { makeHabit } from '../test/factories/habit';
 import { makeUser } from '../test/factories/user';
 import { createHabit } from './create-habit';
 import { updateHabit } from './update-habit';
@@ -84,5 +87,30 @@ describe('update habit service', () => {
         startsDate: new Date(),
       })
     ).rejects.toBeInstanceOf(HabitNotFoundError);
+  });
+
+  it('should throw UpdateFailedError if update affects no rows', async () => {
+    const user = await makeUser();
+
+    // Criar hábito com mesmo userId
+    const habit = await makeHabit({ userId: user.id });
+
+    const updateSpy = vi.spyOn(dbModule.db, 'update').mockReturnValue({
+      set: () => ({
+        where: () => ({
+          returning: async () => [],
+        }),
+      }),
+    } as any);
+
+    await expect(
+      updateHabit({
+        userId: user.id,
+        habitId: habit.id,
+        title: 'Novo Nome',
+      })
+    ).rejects.toBeInstanceOf(UpdateFailedError);
+
+    updateSpy.mockRestore();
   });
 });

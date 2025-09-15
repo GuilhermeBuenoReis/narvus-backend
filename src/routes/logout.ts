@@ -1,5 +1,5 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { logout } from '../services/logout';
 
 export const logoutRoute: FastifyPluginAsyncZod = async app => {

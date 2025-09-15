@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found';
+import { ListHabitsByUserNotFoundError } from '../errors/list-habits--by-user-not-found-error';
 import { getAllHabitsByUser } from '../services/get-all-habits-by-user';
 import { makeHabit } from '../test/factories/habit';
 

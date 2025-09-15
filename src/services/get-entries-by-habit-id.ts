@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '../db';
 import { habitEntries } from '../db/schema';
-import { HabitNotFoundError } from '../errors/habit-not-found';
+import { HabitNotFoundError } from '../errors/habit-not-found-error';
 import { findHabitById } from './find-habit-by-id';
 
 const getHabitEntriesById = z.object({

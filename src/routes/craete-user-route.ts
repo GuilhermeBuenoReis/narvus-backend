@@ -1,11 +1,11 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import z from 'zod';
-import { UserAlreadyExistError } from '../errors/user-already-exist';
+import { z } from 'zod/v4';
+import { UserAlreadyExistError } from '../errors/user-already-exist-error';
 import { createUser } from '../services/create-user';
 
 export const createUserRoute: FastifyPluginAsyncZod = async app => {
   app.post(
-    '/user/create-user',
+    '/user/me/create',
     {
       schema: {
         operationId: 'createUser',

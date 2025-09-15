@@ -1,14 +1,15 @@
+import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
-import { UserNotFoundError } from '../errors/user-not-found-error';
+import { InvalidUserIdError } from '../errors/invalid-user-id-error';
 import { makeUser } from '../test/factories/user';
-import { getUserByEmail } from './get-user-by-email';
+import { getUserById } from './get-user-by-id';
 
-describe('getUserByEmail service', () => {
+describe('getUserById service', () => {
   it('should return the user when found', async () => {
     const { id, name, email, passwordHash, avatarUrl, createdAt, updatedAt } =
       await makeUser();
 
-    const result = await getUserByEmail({ email });
+    const result = await getUserById({ userId: id });
 
     expect(result).toEqual({
       user: {
@@ -23,11 +24,11 @@ describe('getUserByEmail service', () => {
     });
   });
 
-  it('should throw UserNotFoundError when user does not exist', async () => {
-    const email = 'nonexistent@example.com';
+  it('should throw InvalidUserIdError when user does not exist', async () => {
+    const userId = faker.string.uuid();
 
-    await expect(getUserByEmail({ email })).rejects.toBeInstanceOf(
-      UserNotFoundError
+    await expect(getUserById({ userId })).rejects.toBeInstanceOf(
+      InvalidUserIdError
     );
   });
 });

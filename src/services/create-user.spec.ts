@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
-import { UserAlreadyExistError } from '../errors/user-already-exist';
+import { UserAlreadyExistError } from '../errors/user-already-exist-error';
 import { createUser } from './create-user';
 
 describe('create user service', () => {

@@ -1,8 +1,9 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
 import { habits } from '../db/schema';
-import { HabitNotFoundError } from '../errors/habit-not-found';
-import { UserNotFoundError } from '../errors/user-not-found';
+import { HabitNotFoundError } from '../errors/habit-not-found-error';
+import { UpdateFailedError } from '../errors/update-failed-error';
+import { UserNotFoundError } from '../errors/user-not-found-error';
 
 interface UpdateHabitInput {
   habitId: string;
@@ -24,7 +25,6 @@ export async function updateHabit({
   if (!habitId) throw new HabitNotFoundError(habitId);
   if (!userId) throw new UserNotFoundError('Usuário não autenticado');
 
-  // Busca o hábito primeiro
   const [habit] = await db.select().from(habits).where(eq(habits.id, habitId));
 
   if (!habit) throw new HabitNotFoundError(habitId);
@@ -43,5 +43,9 @@ export async function updateHabit({
     .where(eq(habits.id, habitId))
     .returning();
 
-  return { habit: updated };
+  if (!updated) throw new UpdateFailedError('Habit', habitId);
+
+  return {
+    habit: updated,
+  };
 }

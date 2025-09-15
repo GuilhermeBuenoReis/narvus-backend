@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
-import { InvalidUserIdError } from '../errors/invalid-user-id';
+import { InvalidUserIdError } from '../errors/invalid-user-id-error';
 import { makeUser } from '../test/factories/user';
 import { createHabit } from './create-habit';
 

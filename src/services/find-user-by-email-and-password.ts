@@ -3,8 +3,8 @@ import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '../db';
 import { users } from '../db/schema';
-import { InvalidCredentialsError } from '../errors/invalid-credentials';
-import { UserNotFoundError } from '../errors/user-not-found';
+import { InvalidCredentialsError } from '../errors/invalid-credentials-error';
+import { UserNotFoundError } from '../errors/user-not-found-error';
 
 export const findUserByEmailAndPasswordSchema = z.object({
   email: z.email(),

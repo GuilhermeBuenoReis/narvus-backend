@@ -1,6 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import z from 'zod';
-import { InvalidUserIdError } from '../errors/invalid-user-id';
+import { z } from 'zod/v4';
+import { InvalidUserIdError } from '../errors/invalid-user-id-error';
 import { authenticateUserMiddleware } from '../middleware/authenticate-user-middleware';
 import { createHabit } from '../services/create-habit';
 

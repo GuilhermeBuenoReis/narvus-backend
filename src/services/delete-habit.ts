@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '../db';
 import { habits } from '../db/schema';
-import { HabitNotFoundError } from '../errors/habit-not-found';
+import { HabitNotFoundError } from '../errors/habit-not-found-error';
 
 const deleteHabitSchema = z.object({
   habitId: z.uuid({ version: 'v4' }),

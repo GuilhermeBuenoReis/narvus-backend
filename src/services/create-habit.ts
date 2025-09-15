@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { db } from '../db';
 import { habits } from '../db/schema';
-import { InvalidUserIdError } from '../errors/invalid-user-id';
+import { InvalidUserIdError } from '../errors/invalid-user-id-error';
 import { findUserById } from './find-user-by-id';
 
 export const createHabitInputSchema = z.object({
