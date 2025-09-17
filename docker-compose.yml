@@ -1,7 +1,7 @@
 name: controll-habits
 services:
   pg: 
-    image: bitnami/postgresql:16.6.0
+    image: postgres:16.6
     ports:
       - '5432:5432'
     environment:
