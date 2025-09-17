@@ -42,23 +42,19 @@
 - [x] `services/find-user-by-email.ts`
 - [x] `services/find-user-by-email-and-password.ts` — valida senha
 - [x] `services/update-user.ts`
-- [ ] `services/delete-user.ts`
+- [x] `services/delete-user.ts`
 - [x] `routes/auth/register.route.ts` — endpoint register
 - [x] `routes/auth/login.route.ts` — login
 - [x] `routes/auth/logout.route.ts`
 - [x] `routes/auth/refresh-token.route.ts`
 - [x] `routes/users.update.route.ts` — PUT /users/:id
 - [x] `routes/users.get.route.ts` — GET /users/:id
-- [ ] `routes/users.delete.route.ts`
-- [ ] `utils/password.hash.ts` — hashing (bcrypt/argon2)
-- [ ] `utils/password.verify.ts`
-- [ ] `middlewares/authenticate.ts` — protege rotas
-- [ ] `middlewares/authorize.ts` — roles/permissions
-- [ ] `routes/health/liveness.route.ts`
-- [ ] `routes/health/readiness.route.ts`
-- [ ] `config/env.ts` — carregamento e validação das variáveis de ambiente (zod/dotenv)
-- [ ] `services/session.store.ts` — opcionalmente para token blacklisting
-- [ ] `schemas/zod/user.schema.ts` — validação de payloads
+- [x] `routes/users.delete.route.ts`
+- [x] `middlewares/authenticate.ts` — protege rotas
+- [x] `middlewares/authorize.ts` — roles/permissions
+- [x] `routes/health/liveness.route.ts`
+- [-] `routes/health/readiness.route.ts`
+- [x] `config/env.ts` — carregamento e validação das variáveis de ambiente (zod/dotenv)
 
 ---
 
@@ -69,20 +65,11 @@
 - [x] `services/get-all-habits-by-user.ts`
 - [x] `services/update-habit.ts`
 - [x] `services/delete-habit.ts`
-- [ ] `services/bulk-create-habits.ts` — para import
-- [ ] `services/toggle-habit-active.ts` — ativar/desativar
-- [ ] `services/archive-habit.ts` — arquivar (soft delete)
-- [ ] `routes/habits.create.route.ts` — POST /users/:userId/habits
+- [x] `routes/habits.create.route.ts` — POST /users/:userId/habits
 - [x] `routes/habits.list.route.ts` — GET /users/:userId/habits
 - [x] `routes/habits.get.route.ts` — GET /habits/:habitId
 - [x] `routes/habits.update.route.ts` — PATCH/PUT /habits/:habitId
 - [x] `routes/habits.delete.route.ts` — DELETE /habits/:habitId
-- [ ] `dto/habit.create.dto.ts`
-- [ ] `dto/habit.update.dto.ts`
-- [ ] `validators/habit.validator.ts` — zod schema para habit
-- [ ] `policies/habit.policy.ts` — ownership checks
-- [ ] `controllers/habit.controller.ts` — thin layer para rotas
-- [ ] `handlers/habit.events.ts` — event hooks (ex.: habit.created -> schedule jobs)
 
 **Campos importantes em `habits` (exemplo recomendado):**
 - id, userId, title, description, createdAt, updatedAt, active, timezone

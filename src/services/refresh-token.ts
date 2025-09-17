@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
+import { env } from '../config/env';
 import { db } from '../db';
 import { revokedTokens } from '../db/schema';
 import { UnauthorizedError } from '../errors/unauthorized-error';
-import { env } from '../http/env';
 import { findUserById } from './find-user-by-id';
 
 interface RefreshTokenInput {

@@ -1,7 +1,7 @@
 import type { FastifyRequest } from 'fastify';
 import jwt from 'jsonwebtoken';
+import { env } from '../config/env';
 import { UnauthorizedError } from '../errors/unauthorized-error';
-import { env } from '../http/env';
 
 export async function authenticateUserMiddleware(request: FastifyRequest) {
   const token = request.cookies.narvus_token;

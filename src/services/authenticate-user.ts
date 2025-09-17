@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { env } from '../config/env';
 import { UnauthorizedError } from '../errors/unauthorized-error';
-import { env } from '../http/env';
 import { findUserByEmail } from './find-user-by-email';
 
 interface AuthenticateUserInput {

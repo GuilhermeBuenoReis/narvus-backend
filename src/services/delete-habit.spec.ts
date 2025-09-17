@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
+import { DeleteFailedError } from '../errors/delete-failed-error';
 import { HabitNotFoundError } from '../errors/habit-not-found-error';
 import { makeUser } from '../test/factories/user';
 import { createHabit } from './create-habit';
@@ -32,5 +33,13 @@ describe('delete habit', () => {
         userId: user.id,
       })
     ).rejects.toThrow(HabitNotFoundError);
+  });
+
+  it('should throw DeleteFailedError when trying to delete a non-existing habit', async () => {
+    const fakeId = faker.string.uuid();
+
+    await expect(deleteHabit({ habitId: fakeId })).rejects.toThrow(
+      DeleteFailedError
+    );
   });
 });
