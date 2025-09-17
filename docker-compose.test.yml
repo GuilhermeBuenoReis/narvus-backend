@@ -1,6 +1,6 @@
 services:
   controll-habits-test:
-    image: bitnami/postgresql:latest
+    image: bitnami/postgresql:16.6.0
     ports:
       - '5433:5432'
     environment:
