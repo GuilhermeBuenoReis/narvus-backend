@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
-import { habitEntries } from '../db/schema';
+import { schema } from '../db/schema';
 import { HabitEntrieNotFoundError } from '../errors/habit-entrie-not-found-error';
 import { HabitNotFoundError } from '../errors/habit-not-found-error';
 import { UpdateFailedError } from '../errors/update-failed-error';
@@ -32,7 +32,7 @@ export async function updateHabitEntrie({
   if (!entrie) throw new HabitEntrieNotFoundError(habitId);
 
   const [updated] = await db
-    .update(habitEntries)
+    .update(schema.habitEntries)
     .set({
       habitId,
       userId,
@@ -40,7 +40,7 @@ export async function updateHabitEntrie({
       createdAt,
       entryDate,
     })
-    .where(eq(habitEntries.id, habitEntrieId))
+    .where(eq(schema.habitEntries.id, habitEntrieId))
     .returning();
 
   if (!updated) throw new UpdateFailedError('Habit entrie', habitId);

@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '../db';
-import { users } from '../db/schema';
+import { schema } from '../db/schema';
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error';
 import { UserNotFoundError } from '../errors/user-not-found-error';
 
@@ -21,14 +21,14 @@ export async function findUserByEmailAndPassword({
 }: FindUserByEmailAndPasswordInput) {
   const [user] = await db
     .select({
-      id: users.id,
-      name: users.name,
-      email: users.email,
-      passwordHash: users.passwordHash,
-      avatarUrl: users.avatarUrl,
+      id: schema.users.id,
+      name: schema.users.name,
+      email: schema.users.email,
+      passwordHash: schema.users.passwordHash,
+      avatarUrl: schema.users.avatarUrl,
     })
-    .from(users)
-    .where(eq(users.email, email))
+    .from(schema.users)
+    .where(eq(schema.users.email, email))
     .limit(1);
 
   if (!user) {

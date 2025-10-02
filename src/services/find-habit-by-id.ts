@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import z from 'zod';
 import { db } from '../db';
-import { habits } from '../db/schema';
+import { schema } from '../db/schema';
 import { HabitNotFoundError } from '../errors/habit-not-found-error';
 
 const findHabitByIdSchema = z.object({
@@ -14,8 +14,8 @@ type FindHabitByIdInput = z.infer<typeof findHabitByIdSchema>;
 export async function findHabitById({ habitId, userId }: FindHabitByIdInput) {
   const [result] = await db
     .select()
-    .from(habits)
-    .where(and(eq(habits.id, habitId), eq(habits.userId, userId)));
+    .from(schema.habits)
+    .where(and(eq(schema.habits.id, habitId), eq(schema.habits.userId, userId)));
 
   if (!result) throw new HabitNotFoundError(habitId);
 

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import { db } from '../db';
-import { users } from '../db/schema';
+import { schema } from '../db/schema';
 import { UserAlreadyExistError } from '../errors/user-already-exist-error';
 import { findUserByEmail } from './find-user-by-email';
 
@@ -29,7 +29,7 @@ export async function createUser({
   const passwordHash = await bcrypt.hash(password, 10);
 
   const [user] = await db
-    .insert(users)
+    .insert(schema.users)
     .values({
       name,
       email,

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
 import { db } from '../db';
-import { habitEntries } from '../db/schema';
+import { schema } from '../db/schema';
 import { HabitNotFoundError } from '../errors/habit-not-found-error';
 import { UserNotFoundError } from '../errors/user-not-found-error';
 import { findHabitById } from './find-habit-by-id';
@@ -44,7 +44,7 @@ export async function createHabitEntrie({
   const { id: habitFoundId } = habitFound.habit;
 
   const [result] = await db
-    .insert(habitEntries)
+    .insert(schema.habitEntries)
     .values({
       userId: userFoundId,
       habitId: habitFoundId,
@@ -54,9 +54,9 @@ export async function createHabitEntrie({
     .returning()
     .onConflictDoUpdate({
       target: [
-        habitEntries.userId,
-        habitEntries.habitId,
-        habitEntries.entryDate,
+        schema.habitEntries.userId,
+        schema.habitEntries.habitId,
+        schema.habitEntries.entryDate,
       ],
       set: { completed: completed ?? false },
     });

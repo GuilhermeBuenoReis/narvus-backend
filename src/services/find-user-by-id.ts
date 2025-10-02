@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
-import { users } from '../db/schema';
+import { schema } from '../db/schema';
 
 interface findUserByIdRequest {
   userId: string;
@@ -9,8 +9,8 @@ interface findUserByIdRequest {
 export async function findUserById({ userId }: findUserByIdRequest) {
   const [response] = await db
     .select()
-    .from(users)
-    .where(eq(users.id, userId))
+    .from(schema.users)
+    .where(eq(schema.users.id, userId))
     .limit(1);
 
   const user = response ?? null;

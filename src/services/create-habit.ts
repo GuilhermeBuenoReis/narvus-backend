@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { db } from '../db';
-import { habits } from '../db/schema';
+import { schema } from '../db/schema';
 import { InvalidUserIdError } from '../errors/invalid-user-id-error';
 import { findUserById } from './find-user-by-id';
 
@@ -32,7 +32,7 @@ export async function createHabit({
     : undefined;
 
   const [habit] = await db
-    .insert(habits)
+    .insert(schema.habits)
     .values({
       userId: userFound.user.id,
       title,

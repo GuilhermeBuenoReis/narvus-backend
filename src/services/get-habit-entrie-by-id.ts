@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
-import { habitEntries } from '../db/schema';
+import { schema } from '../db/schema';
 import { HabitEntrieNotFoundError } from '../errors/habit-entrie-not-found-error';
 import { findHabitEntrieById } from './find-habit-entrie-by-id';
 
@@ -16,8 +16,8 @@ export async function getHabitEntriesById({
 
   const [result] = await db
     .select()
-    .from(habitEntries)
-    .where(eq(habitEntries.id, habitEntrieId));
+    .from(schema.habitEntries)
+    .where(eq(schema.habitEntries.id, habitEntrieId));
 
   const entrie = result;
 

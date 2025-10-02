@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { db } from '../db';
-import { revokedTokens } from '../db/schema';
+import { schema } from '../db/schema';
 import { UnauthorizedError } from '../errors/unauthorized-error';
 import { findUserById } from './find-user-by-id';
 
@@ -14,8 +14,8 @@ export async function refreshToken({ refreshToken }: RefreshTokenInput) {
   try {
     const [revoked] = await db
       .select()
-      .from(revokedTokens)
-      .where(eq(revokedTokens.token, refreshToken));
+      .from(schema.revokedTokens)
+      .where(eq(schema.revokedTokens, refreshToken));
 
     if (revoked) throw new UnauthorizedError('Refresh token revogado.');
 
@@ -37,7 +37,7 @@ export async function refreshToken({ refreshToken }: RefreshTokenInput) {
       expiresIn: '7d',
     });
 
-    await db.insert(revokedTokens).values({ token: refreshToken });
+    await db.insert(schema.revokedTokens).values({ token: refreshToken });
 
     return {
       accessToken: newAccessToken,

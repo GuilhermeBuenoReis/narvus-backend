@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
-import { habitEntries } from '../db/schema';
+import { schema } from '../db/schema';
 import { DeleteFailedError } from '../errors/delete-failed-error';
 import { HabitEntrieNotFoundError } from '../errors/habit-entrie-not-found-error';
 
@@ -14,8 +14,8 @@ export async function deleteHabitEntrie({
   if (!habitEntrieId) throw new HabitEntrieNotFoundError(habitEntrieId);
 
   const result = await db
-    .delete(habitEntries)
-    .where(eq(habitEntries.habitId, habitEntrieId))
+    .delete(schema.habitEntries)
+    .where(eq(schema.habitEntries.habitId, habitEntrieId))
     .returning();
 
   if (result.length === 0) {

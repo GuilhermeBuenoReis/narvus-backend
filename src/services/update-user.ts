@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
-import { users } from '../db/schema';
+import { schema } from '../db/schema';
 import { UpdateFailedError } from '../errors/update-failed-error';
 import { UserAlreadyExistError } from '../errors/user-already-exist-error';
 import { findUserByEmail } from './find-user-by-email';
@@ -55,9 +55,9 @@ export async function updateUser({
   }
 
   const [updatedUser] = await db
-    .update(users)
+    .update(schema.users)
     .set(dataToUpdate)
-    .where(eq(users.id, userId))
+    .where(eq(schema.users.id, userId))
     .returning();
 
   if (!updatedUser) {

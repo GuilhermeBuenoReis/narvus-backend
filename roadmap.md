@@ -81,11 +81,11 @@
 ## 3) Habit Entries (CRUD + queries)
 
 - [x] `services/create-habit-entrie.ts` — cria entrada
-- [ ] `services/delete-habit-entrie.ts`
-- [ ] `services/update-habit-entrie.ts`
-- [ ] `services/get-entries-by-habit-id.ts`
-- [ ] `services/get-entries-by-user-id.ts`
-- [ ] `services/get-entries-by-date-range.ts`
+- [x] `services/delete-habit-entrie.ts`
+- [x] `services/update-habit-entrie.ts`
+- [x] `services/get-entries-by-habit-id.ts`
+- [x] `services/get-entries-by-user-id.ts`
+- [-] `services/get-entries-by-date-range.ts`
 - [ ] `services/deduplicate-entries.ts` — deduplicação se necessário
 - [ ] `routes/entries.create.route.ts` — POST /users/:userId/habits/:habitId/entries
 - [x] `routes/entries.list.route.ts` — GET /users/:userId/habits/:habitId/entries
