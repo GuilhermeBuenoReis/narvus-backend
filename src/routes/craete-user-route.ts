@@ -17,8 +17,14 @@ export const createUserRoute: FastifyPluginAsyncZod = async app => {
           password: z.string().min(8).max(128),
           avatarUrl: z.string().max(2048).optional(),
         }),
-        reponse: {
+        response: {
           201: z.object({
+            message: z.string(),
+          }),
+          409: z.object({
+            message: z.string(),
+          }),
+          500: z.object({
             message: z.string(),
           }),
         },
