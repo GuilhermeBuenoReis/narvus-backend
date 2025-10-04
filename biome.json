@@ -25,7 +25,8 @@
 				"useLiteralKeys": "off"
 			},
 			"suspicious": {
-				"noExplicitAny": "off"
+				"noExplicitAny": "off",
+				"useIterableCallbackReturn": "off"
 			}
 		}
 	},
