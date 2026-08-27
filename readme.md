@@ -1,208 +1,141 @@
-# Narvus API — Habit Tracking System
+# Narvus API
 
-A backend API for managing and tracking habits, built with **Node.js, TypeScript, Fastify, and Drizzle ORM**. The project was designed with a focus on scalability, testability, and maintainability, following an architecture with a clear separation of concerns.
+Backend para um sistema de acompanhamento de hábitos, responsável por autenticação, usuários, hábitos, registros de progresso e evolução futura de métricas e estatísticas.
 
------
+A API é construída com TypeScript, Fastify, PostgreSQL e Drizzle ORM, com foco em separação de responsabilidades, testabilidade e uma base simples de operar.
 
-## ✨ Core Features
+## Escopo atual
 
-  - **🔐 Secure Authentication**: JWT and refresh token authentication system via `POST /auth/login`.
-  - **👤 User Management**: User registration (`POST /users`) and retrieval.
-  - **✔️ Habit CRUD**: Full functionality to create, read, update, and delete habits for each user.
-  - **🗓️ Entry Creation**: Allows users to log daily progress for their habits.
-  - **🧪 Co-located Tests**: Unit test suite with Vitest, located alongside services for better clarity.
-  - **📚 Automated Documentation**: Generates a `swagger.json` file and a UI for API documentation.
+- autenticação com access token e refresh token
+- cadastro e consulta de usuários
+- criação, leitura, atualização e remoção de hábitos
+- registro diário de progresso
+- validação de entrada com Zod
+- documentação OpenAPI / Swagger
+- testes automatizados com Vitest
+- ambiente local e de testes com Docker
 
------
+## Arquitetura
 
-## 🚀 Tech Stack
-
-  - **Framework**: [Fastify](https://www.fastify.io/)
-  - **Language**: [TypeScript](https://www.typescriptlang.org/)
-  - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
-  - **Database**: [PostgreSQL](https://www.postgresql.org/)
-  - **Validation**: [Zod](https://zod.dev/)
-  - **Testing**: [Vitest](https://vitest.dev/)
-  - **Documentation**: [Swagger](https://swagger.io/)
-
------
-
-## 📂 Project Structure
-
-```
+```text
 src/
-├─ @types/        # Global type definitions
-├─ db/            # Drizzle config, schema, and migrations
-├─ errors/        # Custom error classes (e.g., UserNotFoundError)
-├─ http/          # Fastify server setup and environment variables
-│  ├─ env.ts
-│  └─ server.ts
-├─ middleware/    # Application middlewares (e.g., authentication)
-├─ routes/        # Files defining each API endpoint
-└─ services/      # Business logic and use cases (with co-located tests)
+├── @types/
+├── db/
+├── errors/
+├── http/
+├── middleware/
+├── routes/
+└── services/
 ```
 
------
+A aplicação mantém as responsabilidades de HTTP, persistência, regras de negócio e erros separadas. Os serviços concentram os casos de uso, enquanto as rotas fazem a tradução entre HTTP e aplicação.
 
-## 🏁 Getting Started
+Os testes ficam próximos dos serviços correspondentes para facilitar navegação e manutenção.
 
-Follow the steps below to set up and run the project.
+## Stack
 
-### Prerequisites
+| Área | Tecnologia |
+| --- | --- |
+| Linguagem | TypeScript |
+| API | Fastify |
+| Banco de dados | PostgreSQL |
+| ORM | Drizzle ORM |
+| Validação | Zod |
+| Testes | Vitest |
+| Documentação | Swagger / OpenAPI |
+| Qualidade | Biome |
+| Infraestrutura local | Docker Compose |
 
-  - [Node.js](https://nodejs.org/) (v18 or higher)
-  - [pnpm](https://pnpm.io/)
-  - [Git](https://git-scm.com/)
-  - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+## Execução com Docker
 
-### 🐳 Running with Docker (Recommended)
+```bash
+git clone https://github.com/GuilhermeBuenoReis/narvus-backend.git
+cd narvus-backend
+cp .env.example .env
+docker compose up --build
+```
 
-This is the simplest way to get the application and database running.
+A API fica disponível em:
 
-1.  **Clone the repository:**
+```text
+http://localhost:3333
+```
 
-    ```sh
-    git clone https://github.com/GuilhermeBuenoReis/narvus-backend.git
-    cd narvus-backend
-    ```
+A documentação pode ser acessada em:
 
-2.  **Set up environment variables:**
-    Copy the example file. The default values in `.env.example` are already configured for Docker Compose.
+```text
+http://localhost:3333/docs
+```
 
-    ```sh
-    cp .env.example .env
-    ```
+## Desenvolvimento local
 
-3.  **Build and start the containers:**
+```bash
+git clone https://github.com/GuilhermeBuenoReis/narvus-backend.git
+cd narvus-backend
+pnpm install
+cp .env.example .env
+pnpm db:migrate
+pnpm dev
+```
 
-    ```sh
-    docker-compose up --build
-    ```
+Variáveis principais:
 
-The server will be available at `http://localhost:3333`.
-The API documentation can be accessed at `http://localhost:3333/docs`.
+```env
+DATABASE_URL=postgres://user:password@localhost:5432/narvus
+JWT_SECRET=your_jwt_secret_here
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_here
+```
 
-### 💻 Local Development Setup
+Use configurações separadas para testes e não versione credenciais reais.
 
-Follow these steps if you prefer to run the application without Docker.
+## Endpoints principais
 
-1.  **Clone the repository:**
+| Método | Endpoint | Responsabilidade |
+| --- | --- | --- |
+| `POST` | `/auth/login` | Autentica o usuário |
+| `POST` | `/auth/refresh` | Renova o access token |
+| `POST` | `/auth/logout` | Revoga a sessão |
+| `POST` | `/users` | Cria um usuário |
+| `GET` | `/users/email/:email` | Consulta usuário por e-mail |
+| `POST` | `/habits` | Cria um hábito |
+| `GET` | `/habits` | Lista hábitos |
+| `GET` | `/habits/:habitId` | Consulta um hábito |
+| `PUT` | `/habits/:habitId` | Atualiza um hábito |
+| `DELETE` | `/habits/:habitId` | Remove um hábito |
+| `POST` | `/habits/:habitId/entries` | Registra progresso |
 
-    ```sh
-    git clone https://github.com/GuilhermeBuenoReis/narvus-backend.git
-    cd narvus-backend
-    ```
+## Scripts
 
-2.  **Install dependencies:**
+```bash
+pnpm dev
+pnpm build
+pnpm start
+pnpm seed
+pnpm test
+pnpm test:watch
+pnpm db:migrate
+```
 
-    ```sh
-    pnpm install
-    ```
+## Direções de evolução
 
-3.  **Set up environment variables:**
-    Copy the example file and fill it with your credentials.
+- CRUD completo de registros de progresso
+- consultas SQL para streaks e métricas
+- API de calendário / heatmap
+- endpoints consolidados de progresso
+- logs estruturados, métricas e observabilidade
 
-    ```sh
-    cp .env.example .env
-    ```
+O roadmap detalhado permanece em [`roadmap.md`](./roadmap.md).
 
-    Adjust the following variables in the `.env` file:
+## Decisões de engenharia
 
-    ```env
-    DATABASE_URL=postgres://user:password@localhost:5432/narvus
-    JWT_SECRET=your_jwt_secret_here
-    JWT_REFRESH_SECRET=your_jwt_refresh_secret_here
-    ```
+**Estatísticas orientadas a SQL.** Cálculos de streaks, percentuais e séries temporais podem aproveitar consultas relacionais e CTEs em vez de mover processamento desnecessário para a aplicação.
 
-    Do the same for the `.env.test` file for running tests.
+**Validação na borda.** Dados externos são validados antes de chegar aos serviços, reduzindo estados inválidos dentro da aplicação.
 
-4.  **Run database migrations:**
-    Make sure you have a PostgreSQL instance running.
+**Erros explícitos.** Erros de domínio e aplicação são representados de forma consistente para que a camada HTTP consiga traduzi-los sem espalhar regras de tratamento.
 
-    ```sh
-    pnpm db:migrate
-    ```
+**Testes próximos do comportamento.** A organização prioriza testar serviços e regras relevantes em vez de usar cobertura como métrica isolada.
 
-5.  **Start the development server:**
-    The server will start with hot-reload enabled.
+## Licença
 
-    ```sh
-    pnpm dev
-    ```
-
------
-
-## 📜 Available Scripts
-
-  - `pnpm dev`: Starts the server in development mode using `tsx`.
-  - `pnpm build`: Compiles the TypeScript code for production with `tsup`.
-  - `pnpm start`: Starts the server in production mode (requires a previous build).
-  - `pnpm seed`: Seeds the database with initial data (via `tsx`).
-  - `pnpm test`: Runs the Vitest test suite using the `.env.test` environment.
-  - `pnpm test:watch`: Runs tests in watch mode.
-  - `pnpm db:migrate`: Generates and applies Drizzle migrations.
-
------
-
-## 🔑 API Endpoints
-
-| Method   | Endpoint                   | Description                                             |
-| :------- | :------------------------- | :------------------------------------------------------ |
-| `POST`   | `/auth/login`              | Authenticates a user and returns an accessToken and refreshToken. |
-| `POST`   | `/auth/refresh`            | Renews an accessToken using a valid refreshToken.       |
-| `POST`   | `/auth/logout`             | Revokes the refreshToken and clears cookies.            |
-| `POST`   | `/users`                   | Creates a new user.                                     |
-| `GET`    | `/users/email/:email`      | Gets a user by their email.                             |
-| `POST`   | `/habits`                  | Creates a new habit for the authenticated user.         |
-| `GET`    | `/habits`                  | Lists all habits for the authenticated user.            |
-| `GET`    | `/habits/:habitId`         | Gets a specific habit by its ID.                        |
-| `PUT`    | `/habits/:habitId`         | Updates an existing habit.                              |
-| `DELETE` | `/habits/:habitId`         | Deletes a habit.                                        |
-| `POST`   | `/habits/:habitId/entries` | Creates a new entry (log) for a habit.                  |
-
------
-
-## 🗺️ Roadmap & Future Improvements
-
-  - [ ] **Full CRUD for Entries**: Implement update, delete, and advanced queries.
-  - [ ] **SQL-first Statistics**: Develop queries to calculate streaks, percentages, and other metrics.
-  - [ ] **Calendar API (Heatmap)**: Use PostgreSQL's `generate_series` for visualizations.
-  - [ ] **Progress Dashboard**: Endpoints to consolidate user progress data.
-  - [ ] **Observability**: Add structured logs and metrics (Prometheus).
-
------
-
-## 💡 Best Practices & Design Decisions
-
-  - **SQL-first for Stats**: The logic for calculating statistics (like streaks) should reside in the database (SQL/CTEs) for maximum performance.
-  - **Co-located Tests**: Test files (`.spec.ts`) are in the same folder as their corresponding services, making navigation easier and ensuring business logic is always tested.
-  - **Custom Errors**: Using the `src/errors` folder allows for standardized and clearer error handling throughout the application.
-  - **Zod Validation**: Route inputs are validated with Zod, ensuring data integrity before it reaches the application logic.
-
------
-
-## 🧪 Testing
-
-  - **To run all tests once:**
-    ```sh
-    pnpm test
-    ```
-  - **To run tests in watch mode:**
-    ```sh
-    pnpm test:watch
-    ```
-
------
-
-## 🤝 Contributing
-
-1.  Open an **Issue** describing the improvement or bug.
-2.  **Fork** the repository.
-3.  Create a new **branch** (`feat/your-feature` or `fix/your-bug`).
-4.  Open a **Pull Request** targeting the `main` branch with a clear description of the changes. Add tests when applicable.
-
------
-
-## 📄 License
-
-This project is licensed under the MIT License.
+MIT.
