@@ -1,36 +1,38 @@
 # Narvus API
 
-Backend para um sistema de acompanhamento de hábitos, responsável por autenticação, usuários, hábitos, registros de progresso e evolução futura de métricas e estatísticas.
+Backend para um sistema de acompanhamento de hábitos, responsável por autenticação, usuários, hábitos e registros de progresso.
 
-A API é construída com TypeScript, Fastify, PostgreSQL e Drizzle ORM, com foco em separação de responsabilidades, testabilidade e uma base simples de operar.
+A API é construída com TypeScript, Fastify, PostgreSQL e Drizzle ORM. O projeto prioriza separação de responsabilidades, validação explícita e testes próximos das regras de aplicação.
 
 ## Escopo atual
 
 - autenticação com access token e refresh token
-- cadastro e consulta de usuários
-- criação, leitura, atualização e remoção de hábitos
-- registro diário de progresso
+- criação, consulta e remoção de usuários
+- criação, consulta, atualização e remoção de hábitos
+- criação, consulta e remoção de registros de progresso
 - validação de entrada com Zod
-- documentação OpenAPI / Swagger
+- persistência relacional em PostgreSQL
+- documentação da API
 - testes automatizados com Vitest
-- ambiente local e de testes com Docker
+- PostgreSQL local por Docker Compose
 
-## Arquitetura
+## Estrutura
 
 ```text
 src/
 ├── @types/
+├── config/
 ├── db/
 ├── errors/
 ├── http/
+├── lib/
 ├── middleware/
 ├── routes/
-└── services/
+├── services/
+└── test/
 ```
 
-A aplicação mantém as responsabilidades de HTTP, persistência, regras de negócio e erros separadas. Os serviços concentram os casos de uso, enquanto as rotas fazem a tradução entre HTTP e aplicação.
-
-Os testes ficam próximos dos serviços correspondentes para facilitar navegação e manutenção.
+As rotas traduzem HTTP para a aplicação, os serviços concentram casos de uso e o acesso a dados permanece separado da camada de transporte.
 
 ## Stack
 
@@ -41,70 +43,42 @@ Os testes ficam próximos dos serviços correspondentes para facilitar navegaç�
 | Banco de dados | PostgreSQL |
 | ORM | Drizzle ORM |
 | Validação | Zod |
+| Autenticação | JWT |
 | Testes | Vitest |
-| Documentação | Swagger / OpenAPI |
+| Documentação | Swagger / Scalar |
 | Qualidade | Biome |
 | Infraestrutura local | Docker Compose |
 
-## Execução com Docker
+## Configuração
+
+A aplicação valida as variáveis de ambiente na inicialização.
+
+```env
+NODE_ENV=development
+DATABASE_URL=postgresql://docker:docker@localhost:5432/controll-habits
+JWT_SECRET=your_jwt_secret_here
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_here
+CLIENT_ORIGIN=http://localhost:3000
+```
+
+Não versione credenciais reais.
+
+## Banco local
+
+O `docker-compose.yml` inicia a instância PostgreSQL usada no desenvolvimento:
 
 ```bash
-git clone https://github.com/GuilhermeBuenoReis/narvus-backend.git
-cd narvus-backend
-cp .env.example .env
-docker compose up --build
+docker compose up -d
 ```
 
-A API fica disponível em:
-
-```text
-http://localhost:3333
-```
-
-A documentação pode ser acessada em:
-
-```text
-http://localhost:3333/docs
-```
-
-## Desenvolvimento local
+## Desenvolvimento
 
 ```bash
-git clone https://github.com/GuilhermeBuenoReis/narvus-backend.git
-cd narvus-backend
 pnpm install
-cp .env.example .env
-pnpm db:migrate
 pnpm dev
 ```
 
-Variáveis principais:
-
-```env
-DATABASE_URL=postgres://user:password@localhost:5432/narvus
-JWT_SECRET=your_jwt_secret_here
-JWT_REFRESH_SECRET=your_jwt_refresh_secret_here
-```
-
-Use configurações separadas para testes e não versione credenciais reais.
-
-## Endpoints principais
-
-| Método | Endpoint | Responsabilidade |
-| --- | --- | --- |
-| `POST` | `/auth/login` | Autentica o usuário |
-| `POST` | `/auth/refresh` | Renova o access token |
-| `POST` | `/auth/logout` | Revoga a sessão |
-| `POST` | `/users` | Cria um usuário |
-| `GET` | `/users/email/:email` | Consulta usuário por e-mail |
-| `POST` | `/habits` | Cria um hábito |
-| `GET` | `/habits` | Lista hábitos |
-| `GET` | `/habits/:habitId` | Consulta um hábito |
-| `PUT` | `/habits/:habitId` | Atualiza um hábito |
-| `DELETE` | `/habits/:habitId` | Remove um hábito |
-| `POST` | `/habits/:habitId/entries` | Registra progresso |
-
-## Scripts
+## Scripts disponíveis
 
 ```bash
 pnpm dev
@@ -113,29 +87,26 @@ pnpm start
 pnpm seed
 pnpm test
 pnpm test:watch
-pnpm db:migrate
+pnpm test:ci
+pnpm db:migrate:test
 ```
-
-## Direções de evolução
-
-- CRUD completo de registros de progresso
-- consultas SQL para streaks e métricas
-- API de calendário / heatmap
-- endpoints consolidados de progresso
-- logs estruturados, métricas e observabilidade
-
-O roadmap detalhado permanece em [`roadmap.md`](./roadmap.md).
 
 ## Decisões de engenharia
 
-**Estatísticas orientadas a SQL.** Cálculos de streaks, percentuais e séries temporais podem aproveitar consultas relacionais e CTEs em vez de mover processamento desnecessário para a aplicação.
-
 **Validação na borda.** Dados externos são validados antes de chegar aos serviços, reduzindo estados inválidos dentro da aplicação.
 
-**Erros explícitos.** Erros de domínio e aplicação são representados de forma consistente para que a camada HTTP consiga traduzi-los sem espalhar regras de tratamento.
+**Erros explícitos.** Erros da aplicação têm representação própria para que a camada HTTP consiga traduzi-los de forma consistente.
 
-**Testes próximos do comportamento.** A organização prioriza testar serviços e regras relevantes em vez de usar cobertura como métrica isolada.
+**Regras de aplicação fora das rotas.** A camada HTTP coordena entrada e saída; comportamento de negócio permanece nos serviços.
 
-## Licença
+**Persistência relacional como parte do modelo.** PostgreSQL e Drizzle são usados de forma explícita em vez de esconder o banco atrás de abstrações que não agregariam valor ao estágio atual do produto.
 
-MIT.
+**Testes próximos do comportamento.** A organização favorece testes dos serviços e fluxos relevantes em vez de tratar cobertura como objetivo isolado.
+
+## Roadmap
+
+O planejamento técnico e as próximas evoluções estão documentados em [`roadmap.md`](./roadmap.md).
+
+## Licenciamento
+
+O `package.json` declara licença ISC. Não há um arquivo de licença separado publicado atualmente no repositório.
