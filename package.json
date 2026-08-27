@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "narvus-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend API for the Narvus habit tracking platform",
   "main": "index.js",
   "scripts": {
     "build": "tsup src",
@@ -15,8 +15,15 @@
     "test:watch": "dotenv -e .env.test -- vitest",
     "test:ci": "dotenv -e .env.test -- vitest run"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "narvus",
+    "habits",
+    "fastify",
+    "typescript",
+    "postgresql",
+    "drizzle"
+  ],
+  "author": "Guilherme Reis",
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
